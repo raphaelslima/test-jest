@@ -1,20 +1,31 @@
 /*
-  - Para criar um teste podemos criar usando a função it() ou test() que são duas funções iguais.
+  Para checar comportamentos de classes precisamos usar o spyOn, isso é usado para verificar os metodos e classes externas que são chamdas nessa classe
 
-  - Ambas as funções recebem 2 parâmetros, sendo o primeiro a descrição e o segundo a função do teste.
-
-  - Usamos a função describe para melhorar a leitura dos testes.
+  afterEach serve para o jest excutar uma ação depis de cada teste, no exemplo passamos uma função que limpa os mocks (spy) em cada teste
 */
-describe('NOME DA CLASSE 1', () => {
-  it('number is 1', () => {
-    const number = 1;
-    expect(number).toBe(1);
-  });
-});
 
-describe('NOME DA CLASSE 2', () => {
-  test('value is not 2', () => {
-    const value = 1;
-    expect(value).not.toBe(2);
+import { Persistency } from './persistency';
+
+describe('Persistency', () => {
+  afterEach(() => jest.clearAllMocks());
+
+  it('should return undefined saveOrder', () => {
+    // Classe princial que está sendo testada
+    const sut = new Persistency();
+    expect(sut.saveOrder()).toBeUndefined();
+  });
+
+  it('should call console.log once', () => {
+    const sut = new Persistency();
+    const consoleSpy = jest.spyOn(console, 'log');
+    sut.saveOrder();
+    expect(consoleSpy).toBeCalledTimes(1);
+  });
+
+  it('should call console.log with "Pedido salvo com sucesso..."', () => {
+    const sut = new Persistency();
+    const consoleSpy = jest.spyOn(console, 'log');
+    sut.saveOrder();
+    expect(consoleSpy).toHaveBeenCalledWith('Pedido salvo com sucesso...');
   });
 });
